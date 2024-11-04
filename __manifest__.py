@@ -12,7 +12,6 @@
     'data': [
         'security/wallet_balance_security.xml',
         'security/ir.model.access.csv',
-        'data/wallet_balance_data.xml',
         'views/wallet_balance_views.xml',
     ],
     'installable': True,
