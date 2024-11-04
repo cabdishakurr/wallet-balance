@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_wallet_balance_category" model="ir.module.category">
+        <field name="name">Wallet Balance</field>
+        <!-- ... rest of the security configuration ... -->
+    </record>
+</odoo> 

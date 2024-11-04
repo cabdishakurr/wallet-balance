@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_wallet_tree" model="ir.ui.view">
+        <field name="name">user.wallet.tree</field>
+        <field name="model">user.wallet</field>
+        <field name="arch" type="xml">
+            <tree string="Wallets" sample="1">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="balance"/>
+                <field name="currency_id"/>
+                <field name="state" decoration-danger="state == 'blocked'" decoration-success="state == 'active'"/>
+                <field name="last_transaction_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_wallet_kanban" model="ir.ui.view">
+        <field name="name">user.wallet.kanban</field>
+        <field name="model">user.wallet</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" sample="1">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="balance"/>
+                <field name="currency_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong><field name="name"/></strong>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <span t-attf-class="badge #{record.state.raw_value == 'active' ? 'bg-success' : 'bg-danger'}">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <field name="user_id"/>
+                                </div>
+                                <div class="col-6 text-end">
+                                    <strong>
+                                        <field name="balance" widget="monetary"/>
+                                        <field name="currency_id" invisible="1"/>
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_wallet_form" model="ir.ui.view">
+        <field name="name">user.wallet.form</field>
+        <field name="model">user.wallet</field>
+        <field name="arch" type="xml">
+            <form string="Wallet">
+                <header>
+                    <button name="action_block" string="Block" type="object" 
+                            attrs="{'invisible': [('state', '=', 'blocked')]}"
+                            groups="user_wallet.group_wallet_manager"/>
+                    <button name="action_unblock" string="Unblock" type="object" 
+                            attrs="{'invisible': [('state', '=', 'active')]}"
+                            groups="user_wallet.group_wallet_manager"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id" attrs="{'readonly': [('id', '!=', False)]}"/>
+                            <field name="balance"/>
+                            <field name="currency_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="last_transaction_date"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_wallet_search" model="ir.ui.view">
+        <field name="name">user.wallet.search</field>
+        <field name="model">user.wallet</field>
+        <field name="arch" type="xml">
+            <search string="Search Wallet">
+                <field name="name"/>
+                <field name="user_id"/>
+                <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Blocked" name="blocked" domain="[('state', '=', 'blocked')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="User" name="user" context="{'group_by': 'user_id'}"/>
+                    <filter string="Status" name="status" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_wallet" model="ir.actions.act_window">
+        <field name="name">Wallets</field>
+        <field name="res_model">user.wallet</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="search_view_id" ref="view_wallet_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first wallet!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wallet_root"
+              name="Wallets"
+              sequence="10"/>
+
+    <menuitem id="menu_wallet_main"
+              name="Wallets"
+              parent="menu_wallet_root"
+              action="action_wallet"
+              sequence="1"/>
+</odoo> 

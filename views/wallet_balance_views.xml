@@ -1,0 +1,10 @@
+<!-- Menu Items -->
+<menuitem id="wallet_balance_menu_root"
+          name="Wallet Balance"
+          sequence="10"/>
+
+<menuitem id="wallet_balance_menu_main"
+          name="Balances"
+          parent="wallet_balance_menu_root"
+          action="action_wallet_balance"
+          sequence="1"/> 

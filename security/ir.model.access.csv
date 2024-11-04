@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_wallet_balance_user,wallet.balance.user,model_wallet_balance,wallet_balance.group_wallet_balance_user,1,0,0,0
+access_wallet_balance_manager,wallet.balance.manager,model_wallet_balance,wallet_balance.group_wallet_balance_manager,1,1,1,1 
