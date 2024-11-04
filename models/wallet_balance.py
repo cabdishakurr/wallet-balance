@@ -11,21 +11,43 @@ class LoyaltyCard(models.Model):
                 old_points = record.points
                 new_points = vals['points']
                 
-                # Call super to update the record
                 result = super(LoyaltyCard, self).write(vals)
                 
-                # Send notification about balance change
                 if old_points != new_points:
+                    # Create notification message
                     message = _(
                         'Your wallet balance has been updated from %(old)s to %(new)s points',
                         old=old_points,
                         new=new_points
                     )
-                    record.message_post(
-                        body=message,
-                        message_type='notification',
-                        subtype_id=self.env.ref('mail.mt_note').id,
-                        partner_ids=[record.partner_id.id]
+                    
+                    # Send notification with sound
+                    self.env['bus.bus']._sendone(
+                        record.partner_id.user_ids[0].partner_id, 
+                        'wallet.balance.update', 
+                        {
+                            'type': 'wallet_update',
+                            'title': _('Wallet Balance Updated'),
+                            'message': message,
+                            'sticky': True,
+                            'warning': True,  # This will play a sound
+                        }
                     )
+                    
+                    # Send inbox notification
+                    self.env['mail.message'].create({
+                        'model': self._name,
+                        'res_id': record.id,
+                        'message_type': 'notification',
+                        'subtype_id': self.env.ref('mail.mt_comment').id,
+                        'partner_ids': [(4, record.partner_id.id)],
+                        'body': message,
+                        'notification_ids': [(0, 0, {
+                            'res_partner_id': record.partner_id.id,
+                            'notification_type': 'inbox',
+                            'notification_status': 'sent',
+                        })]
+                    })
+                    
                 return result
         return super(LoyaltyCard, self).write(vals) 
