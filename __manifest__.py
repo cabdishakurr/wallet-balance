@@ -2,13 +2,13 @@
     'name': 'Wallet Balance',
     'version': '1.0',
     'category': 'Accounting',
-    'summary': 'Display wallet balances',
+    'summary': 'Display wallet balances with notifications',
     'description': """
         This module allows:
         - Users to view their wallet balance
-        - Administrators to view all users' wallets
+        - Receive notifications on balance updates
     """,
-    'depends': ['base', 'loyalty'],
+    'depends': ['base', 'loyalty', 'mail'],
     'data': [
         'views/wallet_balance_views.xml',
     ],
