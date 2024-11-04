@@ -1,10 +1,52 @@
-<!-- Menu Items -->
-<menuitem id="wallet_balance_menu_root"
-          name="Wallet Balance"
-          sequence="10"/>
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_loyalty_card_tree" model="ir.ui.view">
+        <field name="name">loyalty.card.tree</field>
+        <field name="model">loyalty.card</field>
+        <field name="arch" type="xml">
+            <tree string="Wallet Balance">
+                <field name="partner_id"/>
+                <field name="points"/>
+                <field name="program_id"/>
+            </tree>
+        </field>
+    </record>
 
-<menuitem id="wallet_balance_menu_main"
-          name="Balances"
-          parent="wallet_balance_menu_root"
-          action="action_wallet_balance"
-          sequence="1"/> 
+    <!-- Search View -->
+    <record id="view_loyalty_card_search" model="ir.ui.view">
+        <field name="name">loyalty.card.search</field>
+        <field name="model">loyalty.card</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="program_id"/>
+                <filter string="My Wallet" name="my_wallet" domain="[('partner_id', '=', uid)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_loyalty_card_wallet" model="ir.actions.act_window">
+        <field name="name">Wallet Balance</field>
+        <field name="res_model">loyalty.card</field>
+        <field name="view_mode">tree</field>
+        <field name="context">{'search_default_my_wallet': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No wallet balance found
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+    <menuitem id="menu_wallet_balance_root"
+              name="Wallet Balance"
+              sequence="10"/>
+
+    <menuitem id="menu_wallet_balance_main"
+              name="Balances"
+              parent="menu_wallet_balance_root"
+              action="action_loyalty_card_wallet"
+              sequence="1"/>
+</odoo> 

@@ -2,16 +2,14 @@
     'name': 'Wallet Balance',
     'version': '1.0',
     'category': 'Accounting',
-    'summary': 'Manage user wallet balances',
+    'summary': 'Display wallet balances',
     'description': """
         This module allows:
         - Users to view their wallet balance
-        - Administrators to view and manage all users' wallets
+        - Administrators to view all users' wallets
     """,
-    'depends': ['base', 'mail'],
+    'depends': ['base', 'loyalty'],
     'data': [
-        'security/wallet_balance_security.xml',
-        'security/ir.model.access.csv',
         'views/wallet_balance_views.xml',
     ],
     'installable': True,
